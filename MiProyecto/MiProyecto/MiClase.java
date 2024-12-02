@@ -8,8 +8,8 @@ import java.util.Random;
 
 public class MiClase extends JPanel {
     // CONSTANTES
-    private static final int ANCHO = 400;
-    private static final int ALTURA = 400;
+    private static final int ANCHO = 500;
+    private static final int ALTURA = 500;
     private static final int CELDASTAMANO = ALTURA / 4;
     private static final int NUMWIN = 2048;
     // COLORES
@@ -30,26 +30,31 @@ public class MiClase extends JPanel {
     private int[][] tablero = new int[4][4];
     private boolean estadoPerdido = false;
     private boolean estadoGanado = false;
+    private int score = 0;
+    private int bestScore = 0;
+    private JLabel scoreLabel;
+    private JLabel bestScoreLabel;
 
-
+    public native boolean compararSiEs0(int a);
+    public native int regresarMayor(int a, int b);
     public native boolean comprobarSiPierde(int a);
     public native boolean comprobarSiGana(int a, int b);
     public native int sumarNumeros(int a, int b);
-    public native void regresarTexto();
     public native int numAleatorio248();
-    public native int numAleatorio04();
-   // public native void moverNumeros(int[] nums);    // Cargar la biblioteca nativa
+
     static {
         System.loadLibrary("MiBiblioteca");
     }
 
-    public MiClase() {
+    public MiClase(JLabel scoreLabel, JLabel bestScoreLabel) {
+        this.scoreLabel = scoreLabel;
+        this.bestScoreLabel = bestScoreLabel;
+
         setPreferredSize(new Dimension(ANCHO, ALTURA));
         setBackground(BLANCO);
         setFocusable(true);
         agregarEventosTeclado();
         reiniciarJuego();
-
     }
 
     private void agregarEventosTeclado() {
@@ -83,10 +88,19 @@ public class MiClase extends JPanel {
         tablero = new int[4][4];
         estadoPerdido = false;
         estadoGanado = false;
+        score=0;
         generarNumero();
         generarNumero();
         repaint();
     }
+
+    private void actualizarPuntajes() {
+
+        bestScore = regresarMayor(bestScore, score);  // MASMx86
+        scoreLabel.setText(" Score: " + score);
+        bestScoreLabel.setText("Best Score: " + bestScore);
+    }
+
 
     private void generarNumero() {
         ArrayList<int[]> vacios = new ArrayList<>();
@@ -109,7 +123,9 @@ public class MiClase extends JPanel {
     private boolean comprobarGanar() {
         for (int[] fila : tablero) {
             for (int num : fila) {
-                if (comprobarSiGana(num,NUMWIN)) return true; // MASMx86
+                if (comprobarSiGana(num,NUMWIN)) {// MASMx86
+                    return true;
+                }
             }
         }
         return false;
@@ -118,7 +134,9 @@ public class MiClase extends JPanel {
     private boolean comprobarPerder() {
         for (int[] fila : tablero) {
             for (int num : fila) {
-                if (comprobarSiPierde(num)) return false; // MASMx86
+                if (comprobarSiPierde(num)) {// MASMx86
+                    return false;
+                }
             }
         }
         for (int i = 0; i < 4; i++) {
@@ -197,7 +215,7 @@ public class MiClase extends JPanel {
 
         // Agregar todos los números diferentes de cero a la lista
         for (int num : nums) {
-            if (num != 0) {
+            if (compararSiEs0(num)) { // MASMx86
                 noEsZero.add(num);
             }
         }
@@ -219,6 +237,7 @@ public class MiClase extends JPanel {
         for (int i = 0; i < 3; i++) {
             if (nums[i] == nums[i + 1] && nums[i] != 0) {
                 nums[i] = sumarNumeros(nums[i], nums[i]); // MASMx86
+                score = sumarNumeros(score, nums[i]); // MASMx86
                 nums[i + 1] = 0;
             }
         }
@@ -252,25 +271,42 @@ public class MiClase extends JPanel {
                 }
             }
         }
-
-
+        actualizarPuntajes();
 
         if (estadoGanado) {
-            g2.setColor(VERDE);
-            g2.drawString("¡Has Ganado!", ANCHO / 2 - 50, ALTURA / 2);
+            Font font = new Font("Arial",Font.BOLD,30);
+            g2.setFont(font);
+            g2.setColor(Color.GREEN);
+            g2.drawString("¡Has Ganado!", ANCHO / 2 - 100, ALTURA/2);
+            g2.drawString("Presiona R para jugar nuevamente", 2, ALTURA/2 +30);
         } else if (estadoPerdido) {
-            g2.setColor(ROJO);
-            g2.drawString("¡Perdiste!", ANCHO / 2 - 50, ALTURA / 2);
+            Font font = new Font("Arial",Font.BOLD,30);
+            g2.setFont(font);
+            g2.setColor(Color.RED);
+            g2.drawString("¡Perdiste!", ANCHO / 2 - 75, ALTURA/2);
+            g2.drawString("Presiona R para jugar nuevamente", 2, ALTURA/2+30);
         }
     }
 
     public static void main(String[] args) {
-        MiClase conectar = new MiClase();
-        conectar.regresarTexto();
+        JLabel scoreLabel = new JLabel("Score: 0");
+        JLabel bestScoreLabel = new JLabel("Best Score: 0");
+
+        scoreLabel.setFont(new Font("Arial", Font.BOLD, 30));
+        bestScoreLabel.setFont(new Font("Arial", Font.BOLD, 30));
+
+        JPanel scoresPanel = new JPanel();
+        scoresPanel.setLayout(new GridLayout(1, 2));
+        scoresPanel.add(scoreLabel);
+        scoresPanel.add(bestScoreLabel);
+
+        MiClase juego = new MiClase(scoreLabel, bestScoreLabel);
+
         JFrame frame = new JFrame("MiJuego2048");
-        MiClase juego = new MiClase();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.getContentPane().add(juego);
+        frame.setLayout(new BorderLayout());
+        frame.add(scoresPanel, BorderLayout.NORTH);
+        frame.add(juego, BorderLayout.CENTER);
         frame.pack();
         frame.setVisible(true);
     }

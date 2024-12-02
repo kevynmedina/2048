@@ -109,22 +109,6 @@ extern "C" {
 #define MiClase_NUMWIN 2048L
 /*
  * Class:     MiClase
- * Method:    compararSiEs0
- * Signature: (I)Z
- */
-JNIEXPORT jboolean JNICALL Java_MiClase_compararSiEs0
-  (JNIEnv *, jobject, jint);
-
-/*
- * Class:     MiClase
- * Method:    regresarMayor
- * Signature: (II)I
- */
-JNIEXPORT jint JNICALL Java_MiClase_regresarMayor
-  (JNIEnv *, jobject, jint, jint);
-
-/*
- * Class:     MiClase
  * Method:    comprobarSiPierde
  * Signature: (I)Z
  */
@@ -161,6 +145,14 @@ JNIEXPORT void JNICALL Java_MiClase_regresarTexto
  * Signature: ()I
  */
 JNIEXPORT jint JNICALL Java_MiClase_numAleatorio248
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     MiClase
+ * Method:    numAleatorio04
+ * Signature: ()I
+ */
+JNIEXPORT jint JNICALL Java_MiClase_numAleatorio04
   (JNIEnv *, jobject);
 
 #ifdef __cplusplus

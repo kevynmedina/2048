@@ -4,6 +4,23 @@
 
 
 
+JNIEXPORT void JNICALL Java_MiClase_regresarTexto(JNIEnv* env, jobject thisObj) {
+    printf("Este es el texto prueba 2 ");
+}
+
+JNIEXPORT jint JNICALL Java_MiClase_numAleatorio04(JNIEnv* env, jobject thisObj) {
+    // Sumar los dos parámetros
+    int numAleatorio=0;
+    __asm{
+        rdtsc ;marca de tiempo del procesador
+        mov edx,0 ;
+        mov ecx,5 ; divisor para numero del 0 al 4
+        div ecx ; edx tendrá el residuo
+
+        mov numAleatorio,edx
+    }
+    return numAleatorio;
+}
 
 JNIEXPORT jint JNICALL Java_MiClase_numAleatorio248(JNIEnv* env, jobject thisObj) {
     // Sumar los dos parámetros
@@ -95,52 +112,5 @@ JNIEXPORT jint JNICALL Java_MiClase_sumarNumeros(JNIEnv* env, jobject thisObj, j
     }
     return resultado;
 }
-
-JNIEXPORT jint JNICALL Java_MiClase_regresarMayor(JNIEnv* env, jobject thisObj, jint a, jint b) {
-    // Sumar los dos parámetros
-    int resultado;
-    __asm{
-        MOV EAX, a
-        MOV EBX, b
-
-        cmp eax,ebx
-        JA mayor
-        MOV resultado,EBX
-
-        jmp salir
-        mayor:
-        MOV resultado,EAX
-        salir:
-    }
-    return resultado;
-}
-
-JNIEXPORT jboolean JNICALL Java_MiClase_compararSiEs0(JNIEnv* env, jobject thisObj, jint a) {
-
-    __asm{
-        MOV EAX, a
-
-        cmp eax,0
-        je iguales
-
-        MOV a,1
-        jmp salida
-        iguales:
-        MOV a,0
-
-        salida:
-
-
-    }
-    return a;
-}
-
-
-
-
-
-
-
-
 
 
