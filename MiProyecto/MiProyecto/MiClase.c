@@ -2,9 +2,6 @@
 #include <stdio.h>
 #include "MiClase.h"  // Este archivo se genera automáticamente con javah
 
-
-
-
 JNIEXPORT jint JNICALL Java_MiClase_numAleatorio248(JNIEnv* env, jobject thisObj) {
     // Sumar los dos parámetros
     int numAleatorio=0;
@@ -79,9 +76,6 @@ JNIEXPORT jboolean JNICALL Java_MiClase_comprobarSiPierde(JNIEnv* env, jobject t
     return a;
 }
 
-
-
-// Implementación de la función nativa que suma dos números
 JNIEXPORT jint JNICALL Java_MiClase_sumarNumeros(JNIEnv* env, jobject thisObj, jint a, jint b) {
     // Sumar los dos parámetros
     int resultado;
@@ -135,6 +129,16 @@ JNIEXPORT jboolean JNICALL Java_MiClase_compararSiEs0(JNIEnv* env, jobject thisO
     return a;
 }
 
+JNIEXPORT jint JNICALL Java_MiClase_incrementarScore(JNIEnv* env, jobject thisObj, jint a, jint b) {
+    int score;
+    __asm{
+        MOV EAX, a
+        MOV EBX, b
+        ADD EAX,EBX
+        MOV score,EAX;
+    }
+    return score;
+}
 
 
 

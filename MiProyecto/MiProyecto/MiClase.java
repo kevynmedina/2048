@@ -41,7 +41,7 @@ public class MiClase extends JPanel {
     public native boolean comprobarSiGana(int a, int b);
     public native int sumarNumeros(int a, int b);
     public native int numAleatorio248();
-
+    public native int incrementarScore(int a, int b);
     static {
         System.loadLibrary("MiBiblioteca");
     }
@@ -237,7 +237,7 @@ public class MiClase extends JPanel {
         for (int i = 0; i < 3; i++) {
             if (nums[i] == nums[i + 1] && nums[i] != 0) {
                 nums[i] = sumarNumeros(nums[i], nums[i]); // MASMx86
-                score = sumarNumeros(score, nums[i]); // MASMx86
+                score = incrementarScore(score, nums[i]); // MASMx86
                 nums[i + 1] = 0;
             }
         }

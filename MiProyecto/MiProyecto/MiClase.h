@@ -149,19 +149,19 @@ JNIEXPORT jint JNICALL Java_MiClase_sumarNumeros
 
 /*
  * Class:     MiClase
- * Method:    regresarTexto
- * Signature: ()V
- */
-JNIEXPORT void JNICALL Java_MiClase_regresarTexto
-  (JNIEnv *, jobject);
-
-/*
- * Class:     MiClase
  * Method:    numAleatorio248
  * Signature: ()I
  */
 JNIEXPORT jint JNICALL Java_MiClase_numAleatorio248
   (JNIEnv *, jobject);
+
+/*
+ * Class:     MiClase
+ * Method:    incrementarScore
+ * Signature: (II)I
+ */
+JNIEXPORT jint JNICALL Java_MiClase_incrementarScore
+  (JNIEnv *, jobject, jint, jint);
 
 #ifdef __cplusplus
 }
